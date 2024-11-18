@@ -1,3 +1,4 @@
+import NavMenu from "@/components/NavMenu/NavMenu";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
@@ -6,8 +7,9 @@ export const Route = createFileRoute("/_auth")({
 
 export default function RouteComponent() {
 	return (
-		<div>
+		<>
 			<Outlet />
-		</div>
+			<NavMenu />
+		</>
 	);
 }
