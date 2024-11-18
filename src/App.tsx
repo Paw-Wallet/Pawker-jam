@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import Webapp from "@twa-dev/sdk";
 
 const queryClient = new QueryClient();
 
@@ -12,10 +13,19 @@ declare module "@tanstack/react-router" {
 	}
 }
 
-const App = () => (
-	<QueryClientProvider client={queryClient}>
-		<RouterProvider router={router} />
-	</QueryClientProvider>
-);
+const App = () => {
+	if (!Webapp.initDataUnsafe.user?.id) {
+		return (
+			<div className="w-screen h-screen flex items-center justify-center">
+				Please open this app inside telegram
+			</div>
+		);
+	}
+	return (
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>
+	);
+};
 
 export default App;
