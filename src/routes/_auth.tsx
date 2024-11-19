@@ -7,9 +7,9 @@ export const Route = createFileRoute("/_auth")({
 
 export default function RouteComponent() {
 	return (
-		<>
+		<div className="px-4 pt-11 mb-[120px]">
 			<Outlet />
 			<NavMenu />
-		</>
+		</div>
 	);
 }

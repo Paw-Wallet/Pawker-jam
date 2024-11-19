@@ -1,9 +1,80 @@
+// Route.tsx
+import { Header } from "@/components/header";
+import GameStatusTitle from "@/components/game/GameStatusTitle";
 import { createFileRoute } from "@tanstack/react-router";
+import { GameCard, GameProps } from "@/components/game";
 
 export const Route = createFileRoute("/_auth/")({
 	component: RouteComponent,
 });
 
+interface GameSectionProps {
+	titleType: "registered" | "upcoming";
+	games: GameProps[];
+}
+
+const mockGameProps: GameProps[] = [
+	{
+		name: "Bonk x Jupiter tournament",
+		partner: [
+			{ image: "/image/mock/bonk-logo.png", name: "Bonk" },
+			{ image: "/image/mock/jupiter-logo.png", name: "Jupiter" },
+		],
+		reward: 25000,
+		image: "/image/mock/game-2.png",
+		registered: ["Player1", "Player2", "Player3"],
+		startAt: new Date(new Date().getTime() + 3600000),
+		slot: 10,
+		isRegistered: true,
+	},
+	{
+		name: "Bonk x Jupiter tournament 2",
+		partner: [
+			{ image: "/image/mock/bonk-logo.png", name: "Bonk" },
+			{ image: "/image/mock/jupiter-logo.png", name: "Jupiter" },
+		],
+		reward: 25000,
+		image: "/image/mock/game-2.png",
+		registered: ["Player1", "Player2", "Player3"],
+		startAt: new Date(new Date().getTime() + 3600000),
+		slot: 10,
+		isRegistered: true,
+	},
+];
+
+const mockLiveGameProps: GameProps[] = [
+	{
+		name: "Paw Wallet x Trekn tournament",
+		partner: [
+			{ image: "/image/mock/paw-logo.png", name: "Paw Wallet" },
+			{ image: "/image/mock/trekn-logo.png", name: "Trekn" },
+		],
+		reward: 1000,
+		image: "/image/mock/game-1.png",
+		registered: ["Player1", "Player2", "Player3", "Player4"],
+		startAt: new Date(new Date().getTime() - 3600000),
+		slot: 20,
+		isRegistered: true,
+	},
+];
+
+const GameSection: React.FC<GameSectionProps> = ({ titleType, games }) => (
+	<div className="mt-10">
+		<GameStatusTitle type={titleType} />
+		<div className="flex flex-col mt-4 gap-4">
+			{games.map((game) => (
+				<GameCard {...game} key={game.name} />
+			))}
+		</div>
+	</div>
+);
+
 function RouteComponent() {
-	return "Hello /_auth/!";
+	return (
+		<div>
+			<Header />
+			<GameSection games={mockLiveGameProps} titleType="registered" />
+			<GameSection games={mockGameProps} titleType="upcoming" />
+		</div>
+	);
 }
