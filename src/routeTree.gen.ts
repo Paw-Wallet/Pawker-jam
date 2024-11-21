@@ -8,12 +8,19 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from "@tanstack/react-router";
+
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as AuthImport } from "./routes/_auth";
 import { Route as AuthIndexImport } from "./routes/_auth/index";
 import { Route as AuthProfileImport } from "./routes/_auth/profile";
+
+// Create Virtual Routes
+
+const AuthLobbyGameIdLazyImport = createFileRoute("/_auth/lobby/$gameId")();
+const AuthDetailGameIdLazyImport = createFileRoute("/_auth/detail/$gameId")();
 
 // Create/Update Routes
 
@@ -33,6 +40,22 @@ const AuthProfileRoute = AuthProfileImport.update({
 	path: "/profile",
 	getParentRoute: () => AuthRoute,
 } as any);
+
+const AuthLobbyGameIdLazyRoute = AuthLobbyGameIdLazyImport.update({
+	id: "/lobby/$gameId",
+	path: "/lobby/$gameId",
+	getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+	import("./routes/_auth/lobby/$gameId.lazy").then((d) => d.Route)
+);
+
+const AuthDetailGameIdLazyRoute = AuthDetailGameIdLazyImport.update({
+	id: "/detail/$gameId",
+	path: "/detail/$gameId",
+	getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+	import("./routes/_auth/detail/$gameId.lazy").then((d) => d.Route)
+);
 
 // Populate the FileRoutesByPath interface
 
@@ -59,6 +82,20 @@ declare module "@tanstack/react-router" {
 			preLoaderRoute: typeof AuthIndexImport;
 			parentRoute: typeof AuthImport;
 		};
+		"/_auth/detail/$gameId": {
+			id: "/_auth/detail/$gameId";
+			path: "/detail/$gameId";
+			fullPath: "/detail/$gameId";
+			preLoaderRoute: typeof AuthDetailGameIdLazyImport;
+			parentRoute: typeof AuthImport;
+		};
+		"/_auth/lobby/$gameId": {
+			id: "/_auth/lobby/$gameId";
+			path: "/lobby/$gameId";
+			fullPath: "/lobby/$gameId";
+			preLoaderRoute: typeof AuthLobbyGameIdLazyImport;
+			parentRoute: typeof AuthImport;
+		};
 	}
 }
 
@@ -67,11 +104,15 @@ declare module "@tanstack/react-router" {
 interface AuthRouteChildren {
 	AuthProfileRoute: typeof AuthProfileRoute;
 	AuthIndexRoute: typeof AuthIndexRoute;
+	AuthDetailGameIdLazyRoute: typeof AuthDetailGameIdLazyRoute;
+	AuthLobbyGameIdLazyRoute: typeof AuthLobbyGameIdLazyRoute;
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
 	AuthProfileRoute: AuthProfileRoute,
 	AuthIndexRoute: AuthIndexRoute,
+	AuthDetailGameIdLazyRoute: AuthDetailGameIdLazyRoute,
+	AuthLobbyGameIdLazyRoute: AuthLobbyGameIdLazyRoute,
 };
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren);
@@ -80,11 +121,15 @@ export interface FileRoutesByFullPath {
 	"": typeof AuthRouteWithChildren;
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
+	"/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
+	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
 }
 
 export interface FileRoutesByTo {
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
+	"/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
+	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
 }
 
 export interface FileRoutesById {
@@ -92,14 +137,22 @@ export interface FileRoutesById {
 	"/_auth": typeof AuthRouteWithChildren;
 	"/_auth/profile": typeof AuthProfileRoute;
 	"/_auth/": typeof AuthIndexRoute;
+	"/_auth/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
+	"/_auth/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
 }
 
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths: "" | "/profile" | "/";
+	fullPaths: "" | "/profile" | "/" | "/detail/$gameId" | "/lobby/$gameId";
 	fileRoutesByTo: FileRoutesByTo;
-	to: "/profile" | "/";
-	id: "__root__" | "/_auth" | "/_auth/profile" | "/_auth/";
+	to: "/profile" | "/" | "/detail/$gameId" | "/lobby/$gameId";
+	id:
+		| "__root__"
+		| "/_auth"
+		| "/_auth/profile"
+		| "/_auth/"
+		| "/_auth/detail/$gameId"
+		| "/_auth/lobby/$gameId";
 	fileRoutesById: FileRoutesById;
 }
 
@@ -128,7 +181,9 @@ export const routeTree = rootRoute
       "filePath": "_auth.tsx",
       "children": [
         "/_auth/profile",
-        "/_auth/"
+        "/_auth/",
+        "/_auth/detail/$gameId",
+        "/_auth/lobby/$gameId"
       ]
     },
     "/_auth/profile": {
@@ -137,6 +192,14 @@ export const routeTree = rootRoute
     },
     "/_auth/": {
       "filePath": "_auth/index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/detail/$gameId": {
+      "filePath": "_auth/detail/$gameId.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/lobby/$gameId": {
+      "filePath": "_auth/lobby/$gameId.lazy.tsx",
       "parent": "/_auth"
     }
   }
