@@ -3,16 +3,34 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { SiTelegram } from "react-icons/si";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { debounce } from "lodash";
 
 function EditProfile({ onClose }: { onClose: () => void }) {
-	const [name, setName] = useState("");
-	const [url, setUrl] = useState("");
+	const [url, setUrl] = useState(
+		"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg"
+	);
+	const [isClicked, setClicked] = useState(false);
 
-	const updateName = () => {};
+	const updateName = (newName: string) => {
+		// Call API
+		console.log(newName);
+	};
 
 	const updateAvatar = () => {
 		setUrl("");
+		setClicked(false);
+	};
+
+	const debounceUpdateName = useCallback(
+		debounce((nextValue: string) => updateName(nextValue), 1000),
+		[]
+	);
+
+	const handleNameChange = (e: any) => {
+		const { value } = e.target;
+
+		debounceUpdateName(value);
 	};
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +42,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 			};
 			reader.readAsDataURL(file);
 		}
+		setClicked(true);
 	};
 	return (
 		<div className="w-full flex flex-col px-5 items-end">
@@ -35,18 +54,9 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 			</button>
 			<div className="w-full flex flex-col justify-center items-center gap-[13px] mb-12">
 				<div>
-					{url ? (
-						<Avatar props="big" url={url} />
-					) : (
-						<Avatar
-							props="big"
-							url={
-								"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg"
-							}
-						/>
-					)}
+					<Avatar props="big" url={url} />
 				</div>
-				{url ? (
+				{isClicked ? (
 					<button
 						className="w-[30%] text-sm text-white p-1 rounded-lg bg-green-400"
 						onClick={updateAvatar}
@@ -67,16 +77,8 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 						<input
 							className="bg-[#2C2C2C] w-[65%] p-1 no-underline placeholder-white focus:outline-none px-1"
 							placeholder="anonglob"
-							onChange={(e) => setName(e.target.value)}
+							onChange={(e) => handleNameChange(e)}
 						/>
-						{name && (
-							<button
-								className="w-[30%] text-sm text-white p-1 rounded-lg bg-green-400"
-								onClick={updateName}
-							>
-								Save
-							</button>
-						)}
 					</div>
 				</div>
 				<div className="w-full flex font-default py-10 text-base font-normal justify-between items-center">
