@@ -7,8 +7,10 @@ export const Route = createFileRoute("/_auth")({
 
 export default function RouteComponent() {
 	return (
-		<div className="px-4 pt-11 mb-[120px]">
-			<Outlet />
+		<div className="flex flex-col h-screen">
+			<div className="flex-1 px-4 pt-11 pb-[120px]">
+				<Outlet />
+			</div>
 			<NavMenu />
 		</div>
 	);
