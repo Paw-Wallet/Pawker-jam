@@ -1,3 +1,4 @@
+import WithCubeLayout from "@/components/layout/WithCubeLayout";
 import { BottomWrapperContent } from "@/components/NavMenu";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 
@@ -8,7 +9,7 @@ export const Route = createLazyFileRoute("/_auth/lobby/$gameId")({
 function RouteComponent() {
 	const navigate = useNavigate();
 	return (
-		<div className="flex flex-col h-full">
+		<WithCubeLayout>
 			<div className="flex flex-col items-center justify-center">
 				<img alt="game img" src="/image/mock/game-1.png" />
 				<p className="font-bold text-[28px] leading-8 text-center text-[#FFFFFF4D] mt-3.5 w-2/3">
@@ -31,7 +32,6 @@ function RouteComponent() {
 					Leave the lobby
 				</p>
 			</BottomWrapperContent>
-			<div className="-z-10 absolute left-0 right-0 top-[60%] bottom-0 bg-gradient-to-b from-[#2C2C2C] to-[#A55A04]" />
-		</div>
+		</WithCubeLayout>
 	);
 }

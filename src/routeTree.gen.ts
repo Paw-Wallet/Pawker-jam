@@ -20,7 +20,12 @@ import { Route as AuthProfileImport } from "./routes/_auth/profile";
 // Create Virtual Routes
 
 const AuthLobbyGameIdLazyImport = createFileRoute("/_auth/lobby/$gameId")();
-const AuthDetailGameIdLazyImport = createFileRoute("/_auth/detail/$gameId")();
+const AuthDetailGameIdIndexLazyImport = createFileRoute(
+	"/_auth/detail/$gameId/"
+)();
+const AuthDetailGameIdRegisteredLazyImport = createFileRoute(
+	"/_auth/detail/$gameId/registered"
+)();
 
 // Create/Update Routes
 
@@ -49,13 +54,22 @@ const AuthLobbyGameIdLazyRoute = AuthLobbyGameIdLazyImport.update({
 	import("./routes/_auth/lobby/$gameId.lazy").then((d) => d.Route)
 );
 
-const AuthDetailGameIdLazyRoute = AuthDetailGameIdLazyImport.update({
-	id: "/detail/$gameId",
-	path: "/detail/$gameId",
+const AuthDetailGameIdIndexLazyRoute = AuthDetailGameIdIndexLazyImport.update({
+	id: "/detail/$gameId/",
+	path: "/detail/$gameId/",
 	getParentRoute: () => AuthRoute,
 } as any).lazy(() =>
-	import("./routes/_auth/detail/$gameId.lazy").then((d) => d.Route)
+	import("./routes/_auth/detail/$gameId/index.lazy").then((d) => d.Route)
 );
+
+const AuthDetailGameIdRegisteredLazyRoute =
+	AuthDetailGameIdRegisteredLazyImport.update({
+		id: "/detail/$gameId/registered",
+		path: "/detail/$gameId/registered",
+		getParentRoute: () => AuthRoute,
+	} as any).lazy(() =>
+		import("./routes/_auth/detail/$gameId/registered.lazy").then((d) => d.Route)
+	);
 
 // Populate the FileRoutesByPath interface
 
@@ -82,18 +96,25 @@ declare module "@tanstack/react-router" {
 			preLoaderRoute: typeof AuthIndexImport;
 			parentRoute: typeof AuthImport;
 		};
-		"/_auth/detail/$gameId": {
-			id: "/_auth/detail/$gameId";
-			path: "/detail/$gameId";
-			fullPath: "/detail/$gameId";
-			preLoaderRoute: typeof AuthDetailGameIdLazyImport;
-			parentRoute: typeof AuthImport;
-		};
 		"/_auth/lobby/$gameId": {
 			id: "/_auth/lobby/$gameId";
 			path: "/lobby/$gameId";
 			fullPath: "/lobby/$gameId";
 			preLoaderRoute: typeof AuthLobbyGameIdLazyImport;
+			parentRoute: typeof AuthImport;
+		};
+		"/_auth/detail/$gameId/registered": {
+			id: "/_auth/detail/$gameId/registered";
+			path: "/detail/$gameId/registered";
+			fullPath: "/detail/$gameId/registered";
+			preLoaderRoute: typeof AuthDetailGameIdRegisteredLazyImport;
+			parentRoute: typeof AuthImport;
+		};
+		"/_auth/detail/$gameId/": {
+			id: "/_auth/detail/$gameId/";
+			path: "/detail/$gameId";
+			fullPath: "/detail/$gameId";
+			preLoaderRoute: typeof AuthDetailGameIdIndexLazyImport;
 			parentRoute: typeof AuthImport;
 		};
 	}
@@ -104,15 +125,17 @@ declare module "@tanstack/react-router" {
 interface AuthRouteChildren {
 	AuthProfileRoute: typeof AuthProfileRoute;
 	AuthIndexRoute: typeof AuthIndexRoute;
-	AuthDetailGameIdLazyRoute: typeof AuthDetailGameIdLazyRoute;
 	AuthLobbyGameIdLazyRoute: typeof AuthLobbyGameIdLazyRoute;
+	AuthDetailGameIdRegisteredLazyRoute: typeof AuthDetailGameIdRegisteredLazyRoute;
+	AuthDetailGameIdIndexLazyRoute: typeof AuthDetailGameIdIndexLazyRoute;
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
 	AuthProfileRoute: AuthProfileRoute,
 	AuthIndexRoute: AuthIndexRoute,
-	AuthDetailGameIdLazyRoute: AuthDetailGameIdLazyRoute,
 	AuthLobbyGameIdLazyRoute: AuthLobbyGameIdLazyRoute,
+	AuthDetailGameIdRegisteredLazyRoute: AuthDetailGameIdRegisteredLazyRoute,
+	AuthDetailGameIdIndexLazyRoute: AuthDetailGameIdIndexLazyRoute,
 };
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren);
@@ -121,15 +144,17 @@ export interface FileRoutesByFullPath {
 	"": typeof AuthRouteWithChildren;
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
-	"/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
 	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
+	"/detail/$gameId": typeof AuthDetailGameIdIndexLazyRoute;
 }
 
 export interface FileRoutesByTo {
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
-	"/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
 	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
+	"/detail/$gameId": typeof AuthDetailGameIdIndexLazyRoute;
 }
 
 export interface FileRoutesById {
@@ -137,22 +162,35 @@ export interface FileRoutesById {
 	"/_auth": typeof AuthRouteWithChildren;
 	"/_auth/profile": typeof AuthProfileRoute;
 	"/_auth/": typeof AuthIndexRoute;
-	"/_auth/detail/$gameId": typeof AuthDetailGameIdLazyRoute;
 	"/_auth/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/_auth/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
+	"/_auth/detail/$gameId/": typeof AuthDetailGameIdIndexLazyRoute;
 }
 
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths: "" | "/profile" | "/" | "/detail/$gameId" | "/lobby/$gameId";
+	fullPaths:
+		| ""
+		| "/profile"
+		| "/"
+		| "/lobby/$gameId"
+		| "/detail/$gameId/registered"
+		| "/detail/$gameId";
 	fileRoutesByTo: FileRoutesByTo;
-	to: "/profile" | "/" | "/detail/$gameId" | "/lobby/$gameId";
+	to:
+		| "/profile"
+		| "/"
+		| "/lobby/$gameId"
+		| "/detail/$gameId/registered"
+		| "/detail/$gameId";
 	id:
 		| "__root__"
 		| "/_auth"
 		| "/_auth/profile"
 		| "/_auth/"
-		| "/_auth/detail/$gameId"
-		| "/_auth/lobby/$gameId";
+		| "/_auth/lobby/$gameId"
+		| "/_auth/detail/$gameId/registered"
+		| "/_auth/detail/$gameId/";
 	fileRoutesById: FileRoutesById;
 }
 
@@ -182,8 +220,9 @@ export const routeTree = rootRoute
       "children": [
         "/_auth/profile",
         "/_auth/",
-        "/_auth/detail/$gameId",
-        "/_auth/lobby/$gameId"
+        "/_auth/lobby/$gameId",
+        "/_auth/detail/$gameId/registered",
+        "/_auth/detail/$gameId/"
       ]
     },
     "/_auth/profile": {
@@ -194,12 +233,16 @@ export const routeTree = rootRoute
       "filePath": "_auth/index.tsx",
       "parent": "/_auth"
     },
-    "/_auth/detail/$gameId": {
-      "filePath": "_auth/detail/$gameId.lazy.tsx",
-      "parent": "/_auth"
-    },
     "/_auth/lobby/$gameId": {
       "filePath": "_auth/lobby/$gameId.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/detail/$gameId/registered": {
+      "filePath": "_auth/detail/$gameId/registered.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/detail/$gameId/": {
+      "filePath": "_auth/detail/$gameId/index.lazy.tsx",
       "parent": "/_auth"
     }
   }
