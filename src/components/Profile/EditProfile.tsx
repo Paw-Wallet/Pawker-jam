@@ -10,7 +10,6 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 	const [url, setUrl] = useState(
 		"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg"
 	);
-	const [isClicked, setClicked] = useState(false);
 
 	const updateName = (newName: string) => {
 		// Call API
@@ -19,7 +18,6 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 
 	const updateAvatar = () => {
 		setUrl("");
-		setClicked(false);
 	};
 
 	const debounceUpdateName = useCallback(
@@ -42,7 +40,6 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 			};
 			reader.readAsDataURL(file);
 		}
-		setClicked(true);
 	};
 	return (
 		<div className="w-full flex flex-col px-5 items-end">
@@ -56,7 +53,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 				<div>
 					<Avatar props="big" url={url} />
 				</div>
-				{isClicked ? (
+				{url ? (
 					<button
 						className="w-[30%] text-sm text-white p-1 rounded-lg bg-green-400"
 						onClick={updateAvatar}
