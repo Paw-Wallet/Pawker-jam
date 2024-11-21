@@ -3,6 +3,7 @@ import { RewardItem } from "./RewardItem";
 import { StartTimeStatus } from "./StartTimeStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import { useNavigate } from "@tanstack/react-router";
 
 export interface GameProps {
 	name: string;
@@ -81,24 +82,33 @@ const Footer: React.FC<{
 	registered: string[];
 	slot: number;
 	isRegistered: boolean;
-}> = ({ registered, slot, isRegistered }) => (
-	<div className="flex gap-2">
-		<div className="flex items-center justify-center gap-2 px-5 py-4 bg-[#00000033] rounded-xl">
-			<FontAwesomeIcon icon={faUser} size="xs" />
-			<p className="text-[#FFFFFFB2] text-sm leading-4">
-				{registered.length}/{slot}
-			</p>
-		</div>
-		<div
-			className={clsx(
-				"flex-1 flex items-center justify-center rounded-xl px-4 py-2 font-bold text-base leading-5 text-white h-auto",
-				{
-					"bg-[#FF8437]": isRegistered,
-					"bg-black": !isRegistered,
+}> = ({ registered, slot, isRegistered }) => {
+	const navigate = useNavigate();
+	return (
+		<div className="flex gap-2">
+			<div className="flex items-center justify-center gap-2 px-5 py-4 bg-[#00000033] rounded-xl">
+				<FontAwesomeIcon icon={faUser} size="xs" />
+				<p className="text-[#FFFFFFB2] text-sm leading-4">
+					{registered.length}/{slot}
+				</p>
+			</div>
+			<div
+				className={clsx(
+					"flex-1 flex items-center justify-center rounded-xl px-4 py-2 font-bold text-base leading-5 text-white h-auto",
+					{
+						"bg-[#FF8437]": isRegistered,
+						"bg-black": !isRegistered,
+					}
+				)}
+				onClick={() =>
+					navigate({
+						to: isRegistered ? "/lobby/$gameId" : "/detail/$gameId",
+						params: { gameId: "1" },
+					})
 				}
-			)}
-		>
-			{isRegistered ? "Play" : "See details"}
+			>
+				{isRegistered ? "Play" : "See details"}
+			</div>
 		</div>
-	</div>
-);
+	);
+};

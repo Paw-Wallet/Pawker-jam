@@ -71,10 +71,10 @@ const GameSection: React.FC<GameSectionProps> = ({ titleType, games }) => (
 
 function RouteComponent() {
 	return (
-		<div>
+		<>
 			<Header />
 			<GameSection games={mockLiveGameProps} titleType="registered" />
 			<GameSection games={mockGameProps} titleType="upcoming" />
-		</div>
+		</>
 	);
 }

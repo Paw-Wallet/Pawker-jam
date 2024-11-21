@@ -1,5 +1,7 @@
+import { useLocation } from "@tanstack/react-router";
 import NavItem from "./NavItem";
 import { faHome, faUser } from "@fortawesome/free-solid-svg-icons";
+import { BottomWrapperContent } from "./BottomWrapperContent";
 
 const navMenuItems = [
 	{
@@ -15,14 +17,19 @@ const navMenuItems = [
 ];
 
 export default function NavMenu() {
+	const location = useLocation();
+
 	return (
-		<div
-			className="fixed left-0 bottom-0 w-full bg-[#2C2C2C] border-t border-[#D9D9D91A] pt-5 pb-10 px-4
-		grid grid-cols-2"
-		>
-			{navMenuItems.map((item, idx) => (
-				<NavItem {...item} key={idx} />
-			))}
-		</div>
+		<>
+			{["/", "/profile"].includes(location.pathname) && (
+				<BottomWrapperContent>
+					<div className="grid grid-cols-2">
+						{navMenuItems.map((item, idx) => (
+							<NavItem {...item} key={idx} />
+						))}
+					</div>
+				</BottomWrapperContent>
+			)}
+		</>
 	);
 }
