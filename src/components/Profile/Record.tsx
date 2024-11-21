@@ -11,7 +11,7 @@ function Record({ data }: { data: any }) {
 				>
 					{data.point}
 				</span>
-				<img alt="vector" className="w-4 h-4" src="./Vector.png" />
+				<img alt="icon" className="w-4 h-4" src="./image/ic-unit.png" />
 			</div>
 		</div>
 	);
