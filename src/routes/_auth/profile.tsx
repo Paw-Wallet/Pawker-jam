@@ -1,5 +1,5 @@
 import Header from "@/components/Profile/Header";
-import Information from "@/components/Profile/Information";
+import GameInformation from "@/components/Profile/GameInformation";
 import Operation from "@/components/Profile/Operation";
 import RecordList from "@/components/Profile/RecordList";
 import { createFileRoute } from "@tanstack/react-router";
@@ -14,7 +14,7 @@ function Profile() {
 			<div className="w-full h-full px-4 flex flex-col gap-10">
 				<Header />
 				<Operation />
-				<Information />
+				<GameInformation />
 				<RecordList />
 			</div>
 		</div>

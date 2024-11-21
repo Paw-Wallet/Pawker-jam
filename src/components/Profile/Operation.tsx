@@ -4,7 +4,7 @@ function Operation() {
 			<div className="flex flex-col gap-2">
 				<span className="text-sm font-default text-[#FFFFFF80]">Blaze</span>
 				<div className="flex gap-2 items-center">
-					<img alt="vector" className="w-5 h-5" src="./image/ic-unit.png" />
+					<img alt="icon" className="w-5 h-5" src="./image/ic-unit.png" />
 					<span className="text-white text-2xl font-bold">25,000</span>
 				</div>
 				<div className="text-xs text-[#FFFFFFB2] flex gap-2">
