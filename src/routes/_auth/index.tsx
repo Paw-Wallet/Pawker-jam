@@ -25,7 +25,7 @@ const mockGameProps: GameProps[] = [
 		registered: ["Player1", "Player2", "Player3"],
 		startAt: new Date(new Date().getTime() + 3600000),
 		slot: 10,
-		isRegistered: true,
+		isRegistered: false,
 	},
 	{
 		name: "Bonk x Jupiter tournament 2",
@@ -38,7 +38,7 @@ const mockGameProps: GameProps[] = [
 		registered: ["Player1", "Player2", "Player3"],
 		startAt: new Date(new Date().getTime() + 3600000),
 		slot: 10,
-		isRegistered: true,
+		isRegistered: false,
 	},
 ];
 
