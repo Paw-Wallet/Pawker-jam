@@ -76,7 +76,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 						<input
 							className="bg-[#2C2C2C] w-[65%] p-1 no-underline focus:outline-none px-1"
 							value={profile.name}
-							onChange={(e) => handleNameChange(e)}
+							onChange={handleNameChange}
 						/>
 					</div>
 				</div>
