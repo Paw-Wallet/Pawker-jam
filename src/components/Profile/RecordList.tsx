@@ -22,7 +22,7 @@ function RecordList() {
 	return (
 		<div className="p-4 flex flex-col gap-2 rounded-lg border-[1px] border-[#3C3C3C]">
 			<span className="text-xl font-bold text-[#FFFFFF80]">Game Records</span>
-			<div className="grid grid-cols-1 divide-y">
+			<div className="grid grid-cols-1 divide-y divide-[#FFFFFF1A]">
 				{recordList.map((item, index) => (
 					<Record key={index} data={item} />
 				))}

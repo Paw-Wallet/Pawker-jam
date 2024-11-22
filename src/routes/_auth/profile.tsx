@@ -3,20 +3,28 @@ import GameInformation from "@/components/Profile/GameInformation";
 import Operation from "@/components/Profile/Operation";
 import RecordList from "@/components/Profile/RecordList";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import EditProfile from "@/components/Profile/EditProfile";
 
 export const Route = createFileRoute("/_auth/profile")({
 	component: Profile,
 });
 
 function Profile() {
+	const [isEdition, setEdition] = useState(false);
+	const handleEditMode = (isEditOpen: boolean) => () => setEdition(isEditOpen);
 	return (
-		// <div className="overflow-hidden bg-[#2C2C2C]">
-		<div className="w-full h-full flex flex-col gap-10">
-			<Header />
-			<Operation />
-			<GameInformation />
-			<RecordList />
+		<div className="overflow-hidden bg-[#2C2C2C]">
+			{!isEdition ? (
+				<div className="w-full h-full px-4 flex flex-col gap-10">
+					<Header onOpen={handleEditMode(true)} />
+					<Operation />
+					<GameInformation />
+					<RecordList />
+				</div>
+			) : (
+				<EditProfile onClose={handleEditMode(false)} />
+			)}
 		</div>
-		// </div>
 	);
 }
