@@ -6,29 +6,36 @@ import { SiTelegram } from "react-icons/si";
 import { useCallback, useState } from "react";
 import { debounce } from "lodash";
 
+type Profile = {
+	name: string;
+	url: string;
+};
+
 function EditProfile({ onClose }: { onClose: () => void }) {
-	const [url, setUrl] = useState(
-		"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg"
-	);
+	const [profile, setProfile] = useState<Profile>({
+		name: "",
+		url: "https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
+	});
 
-	const updateName = (newName: string) => {
+	const handleSubmitProfile = (name: string, url: string) => {
 		// Call API
-		console.log(newName);
+		setProfile({
+			url: url,
+			name: name,
+		});
 	};
 
-	const updateAvatar = () => {
-		setUrl("");
-	};
+	console.log(profile);
 
 	const debounceUpdateName = useCallback(
-		debounce((nextValue: string) => updateName(nextValue), 1000),
+		debounce((name, url) => handleSubmitProfile(name, url), 1000),
 		[]
 	);
 
 	const handleNameChange = (e: any) => {
 		const { value } = e.target;
 
-		debounceUpdateName(value);
+		debounceUpdateName(value, profile.url);
 	};
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +43,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
-				setUrl(reader.result as string);
+				debounceUpdateName(profile.name, reader.result as string);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -51,21 +58,12 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 			</button>
 			<div className="w-full flex flex-col justify-center items-center gap-[13px] mb-12">
 				<div>
-					<Avatar props="big" url={url} />
+					<Avatar props="big" url={profile.url} />
 				</div>
-				{url ? (
-					<button
-						className="w-[30%] text-sm text-white p-1 rounded-lg bg-green-400"
-						onClick={updateAvatar}
-					>
-						Save
-					</button>
-				) : (
-					<label className="text-[#FFA31A] font-default">
-						Edit profile
-						<input className="hidden" type="file" onChange={handleFileChange} />
-					</label>
-				)}
+				<label className="text-[#FFA31A] font-default">
+					Edit profile
+					<input className="hidden" type="file" onChange={handleFileChange} />
+				</label>
 			</div>
 			<div className="w-full grid grid-cols-1 divide-y">
 				<div className="w-full grid grid-cols-2 font-default pb-9 text-base font-normal">
