@@ -13,27 +13,17 @@ type Profile = {
 
 function EditProfile({ onClose }: { onClose: () => void }) {
 	const [profile, setProfile] = useState<Profile>({
-		name: "",
+		name: "anonglob",
 		url: "https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
 	});
 
-	const handleSubmitProfile = (name: string, url: string) => {
-		// Call API
-		setProfile({
-			url: url,
-			name: name,
-		});
-	};
-
-	console.log(profile);
-
-	const debounceUpdateName = useCallback(
-		debounce((name, url) => handleSubmitProfile(name, url), 1000),
-		[]
-	);
-
 	const handleNameChange = (e: any) => {
 		const { value } = e.target;
+
+		setProfile((pre) => ({
+			...pre,
+			name: value,
+		}));
 
 		debounceUpdateName(value, profile.url);
 	};
@@ -43,11 +33,25 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
+				setProfile((pre) => ({
+					...pre,
+					url: reader.result as string,
+				}));
 				debounceUpdateName(profile.name, reader.result as string);
 			};
 			reader.readAsDataURL(file);
 		}
 	};
+
+	const handleSubmitProfile = debounce(
+		(name, url) => console.log(name, url),
+		1000
+	);
+
+	const debounceUpdateName = useCallback(
+		(name: string, url: string) => handleSubmitProfile(name, url),
+		[]
+	);
 	return (
 		<div className="w-full flex flex-col px-5 items-end">
 			<button
@@ -65,13 +69,13 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 					<input className="hidden" type="file" onChange={handleFileChange} />
 				</label>
 			</div>
-			<div className="w-full grid grid-cols-1 divide-y">
+			<div className="w-full grid grid-cols-1 divide-y divide-[#FFFFFF1A]">
 				<div className="w-full grid grid-cols-2 font-default pb-9 text-base font-normal">
 					<span>Name</span>
 					<div className="flex gap-2">
 						<input
-							className="bg-[#2C2C2C] w-[65%] p-1 no-underline placeholder-white focus:outline-none px-1"
-							placeholder="anonglob"
+							className="bg-[#2C2C2C] w-[65%] p-1 no-underline focus:outline-none px-1"
+							value={profile.name}
 							onChange={(e) => handleNameChange(e)}
 						/>
 					</div>
@@ -79,7 +83,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 				<div className="w-full flex font-default py-10 text-base font-normal justify-between items-center">
 					<span>Connected wallet</span>
 					<span>7FZZ...Mo5GH</span>
-					<MdKeyboardArrowRight />
+					<MdKeyboardArrowRight className="w-6 h-6" />
 				</div>
 				<div className="w-full grid grid-cols-2 font-default py-10 text-base font-normal">
 					<span>Verified socials</span>
