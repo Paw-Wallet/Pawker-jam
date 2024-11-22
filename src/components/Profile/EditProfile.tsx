@@ -17,15 +17,13 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 		url: "https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
 	});
 
-	const handleNameChange = (e: any) => {
-		const { value } = e.target;
+	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target;
 
-		setProfile((pre) => ({
-			...pre,
-			name: value,
-		}));
+		const changingProfile = { ...profile, name: value };
+		setProfile(changingProfile);
 
-		debounceUpdateName(value, profile.url);
+		handleSubmitProfile(changingProfile);
 	};
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,23 +31,19 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
-				setProfile((pre) => ({
-					...pre,
-					url: reader.result as string,
-				}));
-				debounceUpdateName(profile.name, reader.result as string);
+				const changingProfile = { ...profile, url: reader.result as string };
+
+				setProfile(changingProfile);
+				handleSubmitProfile(changingProfile);
 			};
 			reader.readAsDataURL(file);
 		}
 	};
 
-	const handleSubmitProfile = debounce(
-		(name, url) => console.log(name, url),
-		1000
-	);
-
-	const debounceUpdateName = useCallback(
-		(name: string, url: string) => handleSubmitProfile(name, url),
+	const handleSubmitProfile = useCallback(
+		debounce((profile) => {
+			console.log("Submit data", profile);
+		}, 1000),
 		[]
 	);
 	return (
