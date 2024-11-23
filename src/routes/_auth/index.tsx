@@ -2,7 +2,8 @@
 import { Header } from "@/components/header";
 import GameStatusTitle from "@/components/game/GameStatusTitle";
 import { createFileRoute } from "@tanstack/react-router";
-import { GameCard, GameProps } from "@/components/game";
+import { GameCard } from "@/components/game";
+import { IGame } from "@/interface/game.interface";
 
 export const Route = createFileRoute("/_auth/")({
 	component: RouteComponent,
@@ -10,10 +11,10 @@ export const Route = createFileRoute("/_auth/")({
 
 interface GameSectionProps {
 	titleType: "registered" | "upcoming";
-	games: GameProps[];
+	games: IGame[];
 }
 
-const mockGameProps: GameProps[] = [
+const mockGameProps: IGame[] = [
 	{
 		name: "Bonk x Jupiter tournament",
 		partner: [
@@ -22,10 +23,16 @@ const mockGameProps: GameProps[] = [
 		],
 		reward: 25000,
 		image: "/image/mock/game-2.png",
-		registered: ["Player1", "Player2", "Player3"],
+		registered: Array.from({ length: 303 }, (_, i) => ({
+			id: i + 1,
+			username: `Player${i + 1}`,
+			avatar:
+				"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
+		})),
 		startAt: new Date(new Date().getTime() + 3600000),
 		slot: 10,
 		isRegistered: false,
+		description: "aaa",
 	},
 	{
 		name: "Bonk x Jupiter tournament 2",
@@ -35,14 +42,20 @@ const mockGameProps: GameProps[] = [
 		],
 		reward: 25000,
 		image: "/image/mock/game-2.png",
-		registered: ["Player1", "Player2", "Player3"],
+		registered: Array.from({ length: 303 }, (_, i) => ({
+			id: i + 1,
+			username: `Player${i + 1}`,
+			avatar:
+				"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
+		})),
+		description: "aa",
 		startAt: new Date(new Date().getTime() + 3600000),
 		slot: 10,
 		isRegistered: false,
 	},
 ];
 
-const mockLiveGameProps: GameProps[] = [
+const mockLiveGameProps: IGame[] = [
 	{
 		name: "Paw Wallet x Trekn tournament",
 		partner: [
@@ -51,7 +64,13 @@ const mockLiveGameProps: GameProps[] = [
 		],
 		reward: 1000,
 		image: "/image/mock/game-1.png",
-		registered: ["Player1", "Player2", "Player3", "Player4"],
+		registered: Array.from({ length: 303 }, (_, i) => ({
+			id: i + 1,
+			username: `Player${i + 1}`,
+			avatar:
+				"https://imgv3.fotor.com/images/gallery/anime-male-avatar-with-a-pair-of-glasses-made-in-fotor-ai-anime-avatar-creator_2023-06-25-054224_ybzr.jpg",
+		})),
+		description: "aa",
 		startAt: new Date(new Date().getTime() - 3600000),
 		slot: 20,
 		isRegistered: true,

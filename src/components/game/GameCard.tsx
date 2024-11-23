@@ -4,19 +4,9 @@ import { StartTimeStatus } from "./StartTimeStatus";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useNavigate } from "@tanstack/react-router";
+import { IGame, IRegisteredPlayer } from "@/interface/game.interface";
 
-export interface GameProps {
-	name: string;
-	partner: { image: string; name: string }[];
-	reward: string | number;
-	image: string;
-	registered: string[];
-	startAt: Date;
-	slot: number;
-	isRegistered: boolean;
-}
-
-export const GameCard: React.FC<GameProps> = ({
+export const GameCard: React.FC<IGame> = ({
 	name,
 	partner,
 	reward,
@@ -55,9 +45,9 @@ const Title: React.FC<{ name: string }> = ({ name }) => (
 	<h3 className="mt-6 mb-4 font-bold text-xl leading-6">{name}</h3>
 );
 
-const Partners: React.FC<{ partners: { image: string; name: string }[] }> = ({
-	partners,
-}) => (
+export const Partners: React.FC<{
+	partners: { image: string; name: string }[];
+}> = ({ partners }) => (
 	<div className="flex items-center flex-wrap gap-4">
 		{partners.map((partner) => (
 			<div key={partner.name} className="flex items-center gap-1">
@@ -79,7 +69,7 @@ const Reward: React.FC<{ reward: string | number }> = ({ reward }) => (
 );
 
 const Footer: React.FC<{
-	registered: string[];
+	registered: IRegisteredPlayer[];
 	slot: number;
 	isRegistered: boolean;
 }> = ({ registered, slot, isRegistered }) => {
