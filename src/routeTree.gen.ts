@@ -26,6 +26,9 @@ const AuthDetailGameIdIndexLazyImport = createFileRoute(
 const AuthDetailGameIdRegisteredLazyImport = createFileRoute(
 	"/_auth/detail/$gameId/registered"
 )();
+const AuthDetailGameIdQuestLazyImport = createFileRoute(
+	"/_auth/detail/$gameId/quest"
+)();
 
 // Create/Update Routes
 
@@ -71,6 +74,14 @@ const AuthDetailGameIdRegisteredLazyRoute =
 		import("./routes/_auth/detail/$gameId/registered.lazy").then((d) => d.Route)
 	);
 
+const AuthDetailGameIdQuestLazyRoute = AuthDetailGameIdQuestLazyImport.update({
+	id: "/detail/$gameId/quest",
+	path: "/detail/$gameId/quest",
+	getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+	import("./routes/_auth/detail/$gameId/quest.lazy").then((d) => d.Route)
+);
+
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
@@ -103,6 +114,13 @@ declare module "@tanstack/react-router" {
 			preLoaderRoute: typeof AuthLobbyGameIdLazyImport;
 			parentRoute: typeof AuthImport;
 		};
+		"/_auth/detail/$gameId/quest": {
+			id: "/_auth/detail/$gameId/quest";
+			path: "/detail/$gameId/quest";
+			fullPath: "/detail/$gameId/quest";
+			preLoaderRoute: typeof AuthDetailGameIdQuestLazyImport;
+			parentRoute: typeof AuthImport;
+		};
 		"/_auth/detail/$gameId/registered": {
 			id: "/_auth/detail/$gameId/registered";
 			path: "/detail/$gameId/registered";
@@ -126,6 +144,7 @@ interface AuthRouteChildren {
 	AuthProfileRoute: typeof AuthProfileRoute;
 	AuthIndexRoute: typeof AuthIndexRoute;
 	AuthLobbyGameIdLazyRoute: typeof AuthLobbyGameIdLazyRoute;
+	AuthDetailGameIdQuestLazyRoute: typeof AuthDetailGameIdQuestLazyRoute;
 	AuthDetailGameIdRegisteredLazyRoute: typeof AuthDetailGameIdRegisteredLazyRoute;
 	AuthDetailGameIdIndexLazyRoute: typeof AuthDetailGameIdIndexLazyRoute;
 }
@@ -134,6 +153,7 @@ const AuthRouteChildren: AuthRouteChildren = {
 	AuthProfileRoute: AuthProfileRoute,
 	AuthIndexRoute: AuthIndexRoute,
 	AuthLobbyGameIdLazyRoute: AuthLobbyGameIdLazyRoute,
+	AuthDetailGameIdQuestLazyRoute: AuthDetailGameIdQuestLazyRoute,
 	AuthDetailGameIdRegisteredLazyRoute: AuthDetailGameIdRegisteredLazyRoute,
 	AuthDetailGameIdIndexLazyRoute: AuthDetailGameIdIndexLazyRoute,
 };
@@ -145,6 +165,7 @@ export interface FileRoutesByFullPath {
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
 	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/detail/$gameId/quest": typeof AuthDetailGameIdQuestLazyRoute;
 	"/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
 	"/detail/$gameId": typeof AuthDetailGameIdIndexLazyRoute;
 }
@@ -153,6 +174,7 @@ export interface FileRoutesByTo {
 	"/profile": typeof AuthProfileRoute;
 	"/": typeof AuthIndexRoute;
 	"/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/detail/$gameId/quest": typeof AuthDetailGameIdQuestLazyRoute;
 	"/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
 	"/detail/$gameId": typeof AuthDetailGameIdIndexLazyRoute;
 }
@@ -163,6 +185,7 @@ export interface FileRoutesById {
 	"/_auth/profile": typeof AuthProfileRoute;
 	"/_auth/": typeof AuthIndexRoute;
 	"/_auth/lobby/$gameId": typeof AuthLobbyGameIdLazyRoute;
+	"/_auth/detail/$gameId/quest": typeof AuthDetailGameIdQuestLazyRoute;
 	"/_auth/detail/$gameId/registered": typeof AuthDetailGameIdRegisteredLazyRoute;
 	"/_auth/detail/$gameId/": typeof AuthDetailGameIdIndexLazyRoute;
 }
@@ -174,6 +197,7 @@ export interface FileRouteTypes {
 		| "/profile"
 		| "/"
 		| "/lobby/$gameId"
+		| "/detail/$gameId/quest"
 		| "/detail/$gameId/registered"
 		| "/detail/$gameId";
 	fileRoutesByTo: FileRoutesByTo;
@@ -181,6 +205,7 @@ export interface FileRouteTypes {
 		| "/profile"
 		| "/"
 		| "/lobby/$gameId"
+		| "/detail/$gameId/quest"
 		| "/detail/$gameId/registered"
 		| "/detail/$gameId";
 	id:
@@ -189,6 +214,7 @@ export interface FileRouteTypes {
 		| "/_auth/profile"
 		| "/_auth/"
 		| "/_auth/lobby/$gameId"
+		| "/_auth/detail/$gameId/quest"
 		| "/_auth/detail/$gameId/registered"
 		| "/_auth/detail/$gameId/";
 	fileRoutesById: FileRoutesById;
@@ -221,6 +247,7 @@ export const routeTree = rootRoute
         "/_auth/profile",
         "/_auth/",
         "/_auth/lobby/$gameId",
+        "/_auth/detail/$gameId/quest",
         "/_auth/detail/$gameId/registered",
         "/_auth/detail/$gameId/"
       ]
@@ -235,6 +262,10 @@ export const routeTree = rootRoute
     },
     "/_auth/lobby/$gameId": {
       "filePath": "_auth/lobby/$gameId.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/detail/$gameId/quest": {
+      "filePath": "_auth/detail/$gameId/quest.lazy.tsx",
       "parent": "/_auth"
     },
     "/_auth/detail/$gameId/registered": {

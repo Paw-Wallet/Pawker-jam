@@ -4,8 +4,10 @@ import { FaX } from "react-icons/fa6";
 
 export default function DetailHeader({
 	children,
+	to = "/",
 }: {
 	children: React.ReactNode;
+	to?: string;
 }) {
 	const navigate = useNavigate();
 	return (
@@ -15,7 +17,7 @@ export default function DetailHeader({
 			</p>
 			<div
 				className="w-9 h-9 flex items-center justify-center bg-[#FF843780] rounded-full"
-				onClick={() => navigate({ to: "/" })}
+				onClick={() => navigate({ to })}
 			>
 				<FaX size={12} />
 			</div>
