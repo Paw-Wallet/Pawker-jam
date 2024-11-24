@@ -7,7 +7,7 @@ import {
 	RuleBookIcon,
 } from "@/components/Icon";
 import { IGame } from "@/interface/game.interface";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
 import { FaUserPlus } from "react-icons/fa6";
 
@@ -41,6 +41,7 @@ const mock: IGame = {
 };
 
 function RouteComponent() {
+	const navigate = useNavigate();
 	return (
 		<div className="flex flex-col gap-6 h-full">
 			<DetailHeader>Detail</DetailHeader>
@@ -64,6 +65,9 @@ function RouteComponent() {
 				className={clsx(
 					"fixed left-0 bottom-0 w-full bg-[#FF8437] pt-5 pb-10 px-4"
 				)}
+				onClick={() =>
+					navigate({ to: "/detail/$gameId/quest", params: { gameId: "1" } })
+				}
 			>
 				<div className="flex items-center justify-center gap-1">
 					<p className="font-bold">Register with 0</p>
