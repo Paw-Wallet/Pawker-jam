@@ -1,10 +1,10 @@
 import Avatar from "@/components/Profile/Avatar";
-import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { SiTelegram } from "react-icons/si";
 import { useCallback, useState } from "react";
 import { debounce } from "lodash";
+import ConnectWallet from "./ConnectWallet";
 
 type Profile = {
 	name: string;
@@ -77,7 +77,7 @@ function EditProfile({ onClose }: { onClose: () => void }) {
 				<div className="w-full flex font-default py-10 text-base font-normal justify-between items-center">
 					<span>Connected wallet</span>
 					<span>7FZZ...Mo5GH</span>
-					<MdKeyboardArrowRight className="w-6 h-6" />
+					<ConnectWallet />
 				</div>
 				<div className="w-full grid grid-cols-2 font-default py-10 text-base font-normal">
 					<span>Verified socials</span>
